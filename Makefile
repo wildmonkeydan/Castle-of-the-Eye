@@ -7,6 +7,6 @@ cleansub:
 	
 TARGET = Castle
 
-SRCS = main.c psm.c clip.c lookat.c \
+SRCS = main.c clip.c lookat.c \
 
 include ../common.mk 

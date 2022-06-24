@@ -78,6 +78,7 @@
     <ClCompile Include="clip.c" />
     <ClCompile Include="display.c" />
     <ClCompile Include="gameflow.c" />
+    <ClCompile Include="input.c" />
     <ClCompile Include="lookat.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="menu.c" />
@@ -90,6 +91,7 @@
     <ClInclude Include="display.h" />
     <ClInclude Include="gameflow.h" />
     <ClInclude Include="colorLUT.h" />
+    <ClInclude Include="input.h" />
     <ClInclude Include="lookat.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="padEx.h" />

@@ -2,7 +2,7 @@
 
 
 // Region definition
-#define REGION          MODE_NTSC
+#define REGION          0
 #define CD_SECTOR_SIZE  2048
 
  // OT and Packet Buffer sizes

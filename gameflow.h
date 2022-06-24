@@ -1,3 +1,4 @@
 #pragma once
 
-void doGame();
+// Direct gameflow
+void gf_doGame();

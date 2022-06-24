@@ -5,11 +5,13 @@
 
 uint8_t gameMode = 0;
 
-void doGame() {
+void gf_doGame() {
 	switch (gameMode) {
 	case 0:
-		showLegal();
+		gameMode = menu_showLegal();
 		break;
 	case 1:
+		gameMode = menu_mainMenu();
+		break;
 	}
 }
