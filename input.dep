@@ -1,0 +1,16 @@
+input.o: input.c C:/psyq/nolibgs_hello_worlds/psyq/include/stdlib.h \
+ C:/psyq/nolibgs_hello_worlds/psyq/include/stddef.h \
+ C:/psyq/nolibgs_hello_worlds/psyq/include/abs.h \
+ C:/psyq/nolibgs_hello_worlds/psyq/include/convert.h \
+ C:/psyq/nolibgs_hello_worlds/psyq/include/malloc.h \
+ C:/psyq/nolibgs_hello_worlds/psyq/include/qsort.h \
+ C:/psyq/nolibgs_hello_worlds/psyq/include/rand.h \
+ C:/psyq/nolibgs_hello_worlds/psyq/include/stdio.h \
+ c:\psnoobsdk\lib\gcc\mipsel-none-elf\11.1.0\include\stdint.h \
+ c:\psnoobsdk\lib\gcc\mipsel-none-elf\11.1.0\include\stdint-gcc.h \
+ C:/psyq/nolibgs_hello_worlds/psyq/include/libapi.h \
+ C:/psyq/nolibgs_hello_worlds/psyq/include/kernel.h \
+ C:/psyq/nolibgs_hello_worlds/psyq/include/r3000.h \
+ C:/psyq/nolibgs_hello_worlds/psyq/include/asm.h input.h \
+ C:/psyq/nolibgs_hello_worlds/psyq/include/libgte.h \
+ C:/psyq/nolibgs_hello_worlds/psyq/include/libgpu.h padEx.h

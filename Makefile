@@ -7,6 +7,6 @@ cleansub:
 	
 TARGET = Castle
 
-SRCS = main.c clip.c lookat.c \
+SRCS = main.c cd.c display.c gameflow.c input.c menu.c ui.c testSuite.c clip.c gte.c lookat.c \
 
 include ../common.mk 

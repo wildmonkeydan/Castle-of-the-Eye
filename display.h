@@ -1,22 +1,30 @@
 #pragma once
+#include <stdint.h>
 #include "const.h"
+#include "ui.h"
+#include "trtypes.h"
 
-// Double buffer structure
-typedef struct {
-	DISPENV	disp;			// Display environment
-	DRAWENV	draw;			// Drawing environment
-	u_long 	ot[OT_LEN];		// Ordering table
-	char 	p[PACKET_LEN];	// Packet buffer
-} DB;
-
-// Double buffer variables
-static DB	db[2];
-static int	db_active = 0;
-static char* db_nextpri;
-static RECT	screen_clip;
 
 // Initiate the display
 void disp_initDisplay();
 
 // Draw primitives on the screen
 void disp_Display();
+
+// Change the texture page used for drawing
+void disp_SetDrawTPage(SPRTDATA data);
+
+// Draw a sprite (SPRT)
+void disp_DrawSprite(SPRTDATA data, uint8_t color[3]);
+
+// Draw a 16-bit background using VRAM commands
+void disp_DrawBack(u_long* tim, TIM_IMAGE* tparam);
+
+// Draw a TILE primitive
+void disp_DrawTile(TILEDATA data);
+
+// Draw a room
+void gte_DrawRoom(MATRIX* mtx, VECTOR* pos, SVECTOR* rot, tr_room_data room);
+
+// Draw a SPRT8
+void disp_DrawSprite8(SPRTDATA data);

@@ -14,20 +14,23 @@
 		<license file="Assets/LICENSEE.DAT"/>
 		<identifiers
 			system			="PLAYSTATION"
-			volume			="PSN00BSDK_TEMPLATE"
-			volume_set		="PSN00BSDK_TEMPLATE"
-			publisher		="MEIDOTEK"
-			data_preparer	="PSN00BSDK ${PSN00BSDK_VERSION}"
+			volume			="CASTLE OF THE EYE"
+			volume_set		="CASTLE OF THE EYE"
+			publisher		="TURTLESHELL INTERACTIVE"
+			data_preparer	        ="PSYQ  SCEI"
 			application		="PLAYSTATION"
 			copyright		="README.TXT;1"
 		/>
 
 		<directory_tree>
 			<file name="SYSTEM.CNF"		type="data" source="system.cnf" />
-			<file name="TEST.TIM"	type="data" source="Assets/player.tim" />
-			<file name="TEST.PSM"	type="data" source="Assets/pyr.psm" />
+			<file name="LEGAL.TIM"	type="data" source="Assets/legal.tim" />
+			<file name="CASTLE.TIM"	type="data" source="Assets/castle.tim" />
+			<file name="TYPE.TIM"   type="data" source="Assets/UIPack.tim" />
 			<file name="PSX.EXE"	type="data" source="Castle.ps-exe" />
 			<file name="PSX.MAP"	type="data" source="Castle.map" />
+			<file name="CASTLE.LVL"	type="data" source="Assets/level.lvl" />
+            		<file name="COPY.STR" 	type="str"  source="str/copyings.str"/>
 
 			<dummy sectors="1024"/>
 		</directory_tree>

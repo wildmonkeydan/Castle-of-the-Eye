@@ -74,6 +74,7 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="gte.c" />
     <ClCompile Include="cd.c" />
     <ClCompile Include="clip.c" />
     <ClCompile Include="display.c" />
@@ -82,9 +83,12 @@
     <ClCompile Include="lookat.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="menu.c" />
+    <ClCompile Include="strplay.c" />
+    <ClCompile Include="testSuite.c" />
     <ClCompile Include="ui.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="gte.h" />
     <ClInclude Include="cd.h" />
     <ClInclude Include="clip.h" />
     <ClInclude Include="const.h" />
@@ -95,6 +99,8 @@
     <ClInclude Include="lookat.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="padEx.h" />
+    <ClInclude Include="testSuite.h" />
+    <ClInclude Include="trtypes.h" />
     <ClInclude Include="ui.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

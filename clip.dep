@@ -1,0 +1,4 @@
+clip.o: clip.c clip.h \
+ C:/psyq/nolibgs_hello_worlds/psyq/include/sys/types.h \
+ C:/psyq/nolibgs_hello_worlds/psyq/include/libgte.h \
+ C:/psyq/nolibgs_hello_worlds/psyq/include/libgpu.h

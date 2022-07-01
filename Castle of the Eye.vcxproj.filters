@@ -42,6 +42,15 @@
     <ClCompile Include="input.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="strplay.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="testSuite.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gte.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cd.h">
@@ -75,6 +84,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="input.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="testSuite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="trtypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gte.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

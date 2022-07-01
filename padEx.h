@@ -1,3 +1,6 @@
+#pragma once
+#include <stdint.h>
+
 typedef enum {
 	// Standard pads, analog joystick, Jogcon
 	PAD_SELECT		= 1 << 0,
@@ -37,34 +40,12 @@ typedef enum {
 	GCON_B			= 1 << 14
 } PadButton;
 
-typedef struct __attribute__((packed)) _PADTYPE {
-	uint8_t				stat;		// Status
-	uint8_t				len:4;		// Payload length / 2, 0 for multitap
-	uint8_t				type:4;		// Device type (PadTypeID)
-
-	uint16_t			btn;		// Button states
-	union {
-		struct {					// Analog controller:
-			uint8_t		rs_x,rs_y;	// - Right stick coordinates
-			uint8_t		ls_x,ls_y;	// - Left stick coordinates
-			uint8_t		press[12];	// - Button pressure (DualShock 2 only)
-		};
-		struct {					// Mouse:
-			int8_t		x_mov;		// - X movement of mouse
-			int8_t		y_mov;		// - Y movement of mouse
-		};
-		struct {					// neGcon:
-			uint8_t		twist;		// - Controller twist
-			uint8_t		btn_i;		// - I button value
-			uint8_t		btn_ii;		// - II button value
-			uint8_t		trg_l;		// - L trigger value
-		};
-		struct {					// Jogcon:
-			uint16_t	jog_rot;	// - Jog rotation
-		};
-		struct {					// Guncon:
-			uint16_t	gun_x;		// - Gun X position in dotclocks
-			uint16_t	gun_y;		// - Gun Y position in scanlines
-		};
-	};
+typedef struct _PADTYPE
+{
+	unsigned char	stat;
+	unsigned char	len : 4;
+	unsigned char	type : 4;
+	unsigned short	btn;
+	unsigned char	rs_x, rs_y;
+	unsigned char	ls_x, ls_y;
 } PADTYPE;

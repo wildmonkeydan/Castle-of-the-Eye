@@ -1,4 +1,5 @@
 #pragma once
+#include <libgte.h>
 #include <libgpu.h>
 
 typedef struct {
@@ -8,6 +9,11 @@ typedef struct {
 	short x, y, u, v;
 	u_char w, h;
 }SPRTDATA;
+
+typedef struct {
+	RECT size;
+	uint8_t color[3];
+}TILEDATA;
 
 // Load a .tim into VRAM 
 void ui_LoadTexture(u_long* tim, TIM_IMAGE* tparam);
@@ -22,4 +28,7 @@ void ui_DrawSprite(SPRTDATA data, uint8_t color[3]);
 void ui_SetTPage(SPRTDATA data);
 
 // Draw a 16-bit menu background
-void ui_DrawBack(u_long* tim, TIM_IMAGE* tparam);
+//void ui_DrawBack(u_long* tim, TIM_IMAGE* tparam);
+
+// Draw a button icon using a SPRT8
+void ui_DrawButton(int button, int x, int y);

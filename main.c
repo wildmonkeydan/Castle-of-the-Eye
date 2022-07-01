@@ -8,22 +8,33 @@
 #include <libapi.h>
 #include <libspu.h>
 #include <libcd.h>
+#include <libpress.h>
 #include <inline_c.h>
 #include <malloc.h>
+#include "input.h"
+#include "strplay.c"
 #include "gameflow.h"
 #include "const.h"
 #include "display.h"
-#include "input.h"
+
 
 SpuCommonAttr spuSettings;
-static unsigned char ramAddr[0x40000];
+static unsigned char ramAddr[600000];
+STRFILE StrFile[] = {
+	// File name	Resolution		Frame count
+	"\\COPY.STR;1", 320, 240, 893
+};
 
 void init();
 
 int main() {
 	init();
+	/*while (1) {
+		if (PlayStr(320, 240, 0, 0, &StrFile[0]) == 0)	// If player presses Start
+			break;	// Exit the loop
+	}*/
 	while (1) {
-		doGame();
+		gf_doGame();
 		disp_Display();
 	}
 }
@@ -64,6 +75,27 @@ void init() {
 
 	// Load font and open a text stream
 	FntLoad(960, 0);
-	FntOpen(0, 8, 320, 216, 0, 100);
+	FntOpen(80, 150, 320, 216, 0, 200);
 
+}
+
+static void strCheckRGB24() {
+
+	/* From http://psx.arthus.net/sdk/Psy-Q/DOCS/, p.713
+	 * When playing a movie in 24-bit mode, there is a potential hardware conflict between the CD subsystem
+	 * and the MDEC image decompression system which can result in corrupted data. To avoid this,
+	 * StCdInterrupt() may defer transferring a sector and instead set a flag variable called StCdInterFlag to
+	 * indicate that a CD sector is ready to be transferred. Once the MDEC is finished transferring data, your
+	 * application should check StCdIntrFlag and call StCdInterrupt() directly if it is set.
+	 */
+#if TRUECOL
+	extern u_long StCdIntrFlag;
+	// If flag was set
+	if (StCdIntrFlag) {
+		// Trigger data transfer
+		StCdInterrupt();
+		// Reset flag
+		StCdIntrFlag = 0;
+	}
+#endif
 }

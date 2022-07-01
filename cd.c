@@ -12,7 +12,7 @@ unsigned long* cdLoad_File(const char* filename)
 	unsigned long* buffer;
 
 
-	printf("Reading file %s... ", filename);
+	printf("\nReading file %s... ", filename);
 
 	// Search for the file
 	if (!CdSearchFile(&file, (char*)filename))
@@ -48,8 +48,8 @@ void cdMusic_Ready() {
 }
 
 void cdMusic_PlayTrack(int8_t track) {
-	printf("Playing track %d.\n", track);
+	printf("Playing track %d.\n", track + 2);
 
-	uint8_t cmd = itob(track);
+	uint8_t cmd = itob(track + 2);
 	CdControlF(CdlPlay, &cmd);
 }
