@@ -6,6 +6,7 @@ typedef struct {
 	VECTOR	cam_pos;
 	VECTOR	cam_rot;
 	char	count;
+	char	mode;
 }CAMINPUT;
 
 

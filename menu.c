@@ -8,6 +8,7 @@
 #include "cd.h"
 #include "colorLUT.h"
 #include "input.h"
+#include "padEx.h"
 
 int stateCounter = 0;
 static SPRTDATA legalPage;
@@ -33,6 +34,7 @@ uint8_t menu_ShowLegal() {
 		free(font);
 		stateCounter++;
 	}
+	ui_DrawButton(PAD_CROSS, 32, 32);
 	disp_DrawSprite(legalPage, norm);
 	disp_SetDrawTPage(legalPage);
 	if (stateCounter > 300) {

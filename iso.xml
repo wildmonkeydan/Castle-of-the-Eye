@@ -29,7 +29,8 @@
 			<file name="TYPE.TIM"   type="data" source="Assets/UIPack.tim" />
 			<file name="PSX.EXE"	type="data" source="Castle.ps-exe" />
 			<file name="PSX.MAP"	type="data" source="Castle.map" />
-			<file name="CASTLE.LVL"	type="data" source="Assets/level.lvl" />
+			<file name="CASTLE.GEO"	type="data" source="Assets/level.geo" />
+			<file name="CASTLE.MSH" type="data" source="Assets/level.msh" />
             		<file name="COPY.STR" 	type="str"  source="str/copyings.str"/>
 
 			<dummy sectors="1024"/>

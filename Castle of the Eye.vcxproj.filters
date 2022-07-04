@@ -51,6 +51,9 @@
     <ClCompile Include="gte.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="spu.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cd.h">
@@ -93,6 +96,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="gte.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="spu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

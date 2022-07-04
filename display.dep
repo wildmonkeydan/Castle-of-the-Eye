@@ -12,4 +12,4 @@ display.o: display.c C:/psyq/nolibgs_hello_worlds/psyq/include/stdlib.h \
  C:/psyq/nolibgs_hello_worlds/psyq/include/libgpu.h \
  C:/psyq/nolibgs_hello_worlds/psyq/include/libetc.h display.h const.h \
  ui.h trtypes.h clip.h \
- C:/psyq/nolibgs_hello_worlds/psyq/include/sys/types.h
+ C:/psyq/nolibgs_hello_worlds/psyq/include/sys/types.h padEx.h

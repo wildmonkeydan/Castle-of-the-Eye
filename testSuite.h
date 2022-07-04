@@ -27,3 +27,12 @@ void testS_LoadMeshes(u_char* data, lvlData** level);
 
 // Load a room from a file
 tr4_mesh testS_LoadMesh(uint8_t* data, int counter);
+
+// Load a misc level data file
+void testS_LoadMisc(uint8_t* data, lvlData** level);
+
+// Load an animation from a file
+tr4_animation testS_LoadAnimation(uint8_t* data, int counter);
+
+// Load a mesh tree from a file
+tr_meshtree_node testS_LoadMeshtree(uint8_t* data, int counter);

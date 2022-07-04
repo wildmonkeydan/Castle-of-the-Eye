@@ -10,7 +10,7 @@
 
  // OT and Packet Buffer sizes
 #define OT_LEN			4094
-#define PACKET_LEN		160768
+#define PACKET_LEN		20768
 
 // Screen resolution
 #define SCREEN_XRES		320

@@ -26,5 +26,11 @@ void disp_DrawTile(TILEDATA data);
 // Draw a room
 void gte_DrawRoom(MATRIX* mtx, VECTOR* pos, SVECTOR* rot, tr_room_data room);
 
+// Draw a mesh
+void gte_DrawMesh(MATRIX* mtx, VECTOR* pos, SVECTOR* rot, tr4_mesh mesh);
+
 // Draw a SPRT8
 void disp_DrawSprite8(SPRTDATA data);
+
+// Draw a button icon using a SPRT8
+void ui_DrawButton(int button, int x, int y);

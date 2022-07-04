@@ -29,6 +29,3 @@ void ui_SetTPage(SPRTDATA data);
 
 // Draw a 16-bit menu background
 //void ui_DrawBack(u_long* tim, TIM_IMAGE* tparam);
-
-// Draw a button icon using a SPRT8
-void ui_DrawButton(int button, int x, int y);

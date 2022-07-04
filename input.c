@@ -149,6 +149,12 @@ CAMINPUT input_TestSuiteCam(SVECTOR* trot, CAMINPUT input) {
 
 			}
 
+			input.mode = 0;
+
+			if (!(pad->btn & PAD_SELECT)) {
+				input.mode++;
+			}
+
 		}
 
 		// For dual-analog and dual-shock (analog input)

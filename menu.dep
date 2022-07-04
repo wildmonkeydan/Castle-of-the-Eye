@@ -10,4 +10,4 @@ menu.o: menu.c C:/psyq/nolibgs_hello_worlds/psyq/include/stdlib.h \
  c:\psnoobsdk\lib\gcc\mipsel-none-elf\11.1.0\include\stdint-gcc.h \
  C:/psyq/nolibgs_hello_worlds/psyq/include/libgte.h \
  C:/psyq/nolibgs_hello_worlds/psyq/include/libgpu.h ui.h display.h \
- const.h trtypes.h cd.h colorLUT.h input.h
+ const.h trtypes.h cd.h colorLUT.h input.h padEx.h

@@ -9,6 +9,7 @@
 #include "const.h"
 #include "trtypes.h"
 #include "clip.h"
+#include "padEx.h"
 
 // Double buffer structure
 typedef struct {
@@ -123,7 +124,17 @@ void disp_DrawSprite(SPRTDATA data, uint8_t color[3]) {
 }
 
 void disp_DrawSprite8(SPRTDATA data) {
+	SPRT_8* sprt = (SPRT_8*)db_nextpri;
 
+	setSprt8(sprt);
+	setXY0(sprt, data.x, data.y);
+	setUV0(sprt, data.u, data.v);
+	setClut(sprt, data.crect.x, data.crect.y);
+	setRGB0(sprt, 128, 128, 128);
+
+	addPrim(&db[db_active].ot, sprt);
+	sprt++;
+	db_nextpri += sizeof(SPRT_8);
 }
 
 void disp_DrawBack(u_long* tim, TIM_IMAGE* tparam) {
@@ -224,4 +235,153 @@ void gte_DrawRoom(MATRIX* mtx, VECTOR* pos, SVECTOR* rot, tr_room_data room) {
 		
 	}
 	PopMatrix();
+}
+
+void gte_DrawMesh(MATRIX* mtx, VECTOR* pos, SVECTOR* rot, tr4_mesh mesh) {
+
+	// Object and light matrix for object
+	MATRIX omtx;
+
+	// Set object rotation and position
+	RotMatrix(rot, &omtx);
+	TransMatrix(&omtx, pos);
+
+	// Composite coordinate matrix transform, so object will be rotated and
+	// positioned relative to camera matrix (mtx), so it'll appear as
+	// world-space relative.
+	CompMatrixLV(mtx, &omtx, &omtx);
+
+	// Save matrix
+	PushMatrix();
+
+	// Set matrices
+	SetRotMatrix(&omtx);
+	SetTransMatrix(&omtx);
+
+	POLY_F4* poly = (POLY_F4*)db_nextpri;
+
+	if (mesh.NumTexturedRectangles != 0) {
+
+		for (int i = 0; i < mesh.NumTexturedRectangles; i++) {
+
+			long OTz, p, Flag;
+
+			SVECTOR v0 = (SVECTOR){ mesh.Vertices[mesh.TexturedRectangles[i].Vertices[0]].x, mesh.Vertices[mesh.TexturedRectangles[i].Vertices[0]].y, mesh.Vertices[mesh.TexturedRectangles[i].Vertices[0]].z, 0 };
+			SVECTOR v1 = (SVECTOR){ mesh.Vertices[mesh.TexturedRectangles[i].Vertices[1]].x, mesh.Vertices[mesh.TexturedRectangles[i].Vertices[1]].y, mesh.Vertices[mesh.TexturedRectangles[i].Vertices[1]].z, 0 };
+			SVECTOR v2 = (SVECTOR){ mesh.Vertices[mesh.TexturedRectangles[i].Vertices[3]].x, mesh.Vertices[mesh.TexturedRectangles[i].Vertices[3]].y, mesh.Vertices[mesh.TexturedRectangles[i].Vertices[3]].z, 0 };
+			SVECTOR v3 = (SVECTOR){ mesh.Vertices[mesh.TexturedRectangles[i].Vertices[2]].x, mesh.Vertices[mesh.TexturedRectangles[i].Vertices[2]].y, mesh.Vertices[mesh.TexturedRectangles[i].Vertices[2]].z, 0 };
+
+			long nclip = RotAverageNclip4(&v0, &v1, &v2, &v3, (long*)&poly->x0, (long*)&poly->x1, (long*)&poly->x2, (long*)&poly->x3, &p, &OTz, &Flag);
+
+			if (nclip > 0 && OTz > 0 && quad_clip(&screen_clip, (DVECTOR*)&poly->x0, (DVECTOR*)&poly->x1, (DVECTOR*)&poly->x2, (DVECTOR*)&poly->x3) == 0) {
+
+				setPolyF4(poly);
+				setRGB0(poly, 205, 64, 50);
+
+
+				addPrim(&db[db_active].ot, poly);
+				poly++;
+				db_nextpri += sizeof(POLY_F4);
+			}
+
+		}
+	}
+
+	POLY_F3* tri = (POLY_F3*)db_nextpri;
+
+	for (int i = 0; i < mesh.NumTexturedTriangles; i++) {
+
+		long OTz, p, Flag;
+
+		SVECTOR v0 = (SVECTOR){ mesh.Vertices[mesh.TexturedTriangles[i].Vertices[0]].x, mesh.Vertices[mesh.TexturedTriangles[i].Vertices[0]].y, mesh.Vertices[mesh.TexturedTriangles[i].Vertices[0]].z, 0 };
+		SVECTOR v1 = (SVECTOR){ mesh.Vertices[mesh.TexturedTriangles[i].Vertices[1]].x, mesh.Vertices[mesh.TexturedTriangles[i].Vertices[1]].y, mesh.Vertices[mesh.TexturedTriangles[i].Vertices[1]].z, 0 };
+		SVECTOR v2 = (SVECTOR){ mesh.Vertices[mesh.TexturedTriangles[i].Vertices[2]].x, mesh.Vertices[mesh.TexturedTriangles[i].Vertices[2]].y, mesh.Vertices[mesh.TexturedTriangles[i].Vertices[2]].z, 0 };
+
+		long nclip = RotAverageNclip3(&v0, &v1, &v2, (long*)&tri->x0, (long*)&tri->x1, (long*)&tri->x2, &p, &OTz, &Flag);
+
+		if (nclip > 0 && OTz > 0 && tri_clip(&screen_clip, (DVECTOR*)&tri->x0, (DVECTOR*)&tri->x1, (DVECTOR*)&tri->x2) == 0) {
+
+			setPolyF3(tri);
+			setRGB0(tri, 128, 255, 128);
+
+			addPrim(&db[db_active].ot, tri);
+			tri++;
+			db_nextpri += sizeof(POLY_F3);
+		}
+
+	}
+	PopMatrix();
+
+}
+
+void ui_DrawButton(int button, int x, int y) {
+	SPRTDATA sprtd;
+	sprtd.x = x;
+	sprtd.y = y;
+	sprtd.crect.x = 960;
+	sprtd.crect.y = 128;
+
+	switch (button) {
+	case PAD_CROSS:
+		sprtd.u = 128;
+		sprtd.v = 0;
+		break;
+	case PAD_SQUARE:
+		sprtd.u = 136;
+		sprtd.v = 0;
+		break;
+	case PAD_CIRCLE:
+		sprtd.u = 128;
+		sprtd.v = 8;
+		break;
+	case PAD_TRIANGLE:
+		sprtd.u = 136;
+		sprtd.v = 8;
+		break;
+	case PAD_LEFT:
+		sprtd.u = 128;
+		sprtd.v = 16;
+		break;
+	case PAD_RIGHT:
+		sprtd.u = 136;
+		sprtd.v = 16;
+		break;
+	case PAD_UP:
+		sprtd.u = 128;
+		sprtd.v = 24;
+		break;
+	case PAD_DOWN:
+		sprtd.u = 136;
+		sprtd.v = 24;
+		break;
+	default:
+		sprtd.u = 0;
+		sprtd.v = 0;
+		break;
+	}
+
+	SPRT_8* sprt = (SPRT_8*)db_nextpri;
+
+	setSprt8(sprt);
+	setXY0(sprt, sprtd.x, sprtd.y);
+	setUV0(sprt, sprtd.u, sprtd.v);
+	setClut(sprt, sprtd.crect.x, sprtd.crect.y);
+	setRGB0(sprt, 128, 128, 128);
+
+	addPrim(&db[db_active].ot, sprt);
+	sprt++;
+	db_nextpri += sizeof(SPRT_8);
+
+	SPRTDATA tpage;
+	tpage.x = 960;
+	tpage.y = 0;
+	tpage.mode = 0;
+
+	DR_TPAGE* tprit = (DR_TPAGE*)db_nextpri;
+
+	setDrawTPage(tprit, 0, 1, getTPage(tpage.mode & 0x3, 0, tpage.x, tpage.y));
+	addPrim(&db[db_active].ot, tprit);
+	tprit++;
+
+	db_nextpri += sizeof(DR_TPAGE);
 }

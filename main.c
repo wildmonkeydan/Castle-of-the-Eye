@@ -19,7 +19,7 @@
 
 
 SpuCommonAttr spuSettings;
-static unsigned char ramAddr[600000];
+static unsigned char ramAddr[1200000];
 STRFILE StrFile[] = {
 	// File name	Resolution		Frame count
 	"\\COPY.STR;1", 320, 240, 893
