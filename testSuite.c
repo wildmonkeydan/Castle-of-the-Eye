@@ -37,6 +37,10 @@ void testS_Run() {
 		testS_LoadMeshes((unsigned char*)meshData, &level);
 		free(meshData);
 
+		unsigned long* lvlData = cdLoad_File("\\CASTLE.LVL;1");
+		testS_LoadMisc((unsigned char*)lvlData, &level);
+		free(lvlData);
+
 		printf("e");
 		testInit = false;
 	}
@@ -683,6 +687,8 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 
 	(*level)->AnimCommands = malloc(sizeof(tr_anim_command) * (*level)->NumAnimCommands);
 
+	printf("\nNum Anim Commands: %d", (*level)->NumAnimCommands);
+
 	for (int cout = 0; cout < (*level)->NumAnimCommands; cout++) {
 		for (int i = 0; i < 2; i++) {
 			raw16.c[i] = data[byteCounter]; byteCounter++;
@@ -701,6 +707,8 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 	(*level)->NumMeshTrees = raw32.i;
 
 	(*level)->MeshTrees = malloc(sizeof(tr_meshtree_node) * (*level)->NumMeshTrees);
+
+	printf("\nNum Meshtrees: %d", (*level)->NumMeshTrees);
 
 	for (int cout = 0; cout < (*level)->NumMeshTrees; cout++) {
 		(*level)->MeshTrees[cout] = testS_LoadMeshtree(data, byteCounter);
@@ -722,6 +730,110 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 			raw16.c[i] = data[byteCounter]; byteCounter++;
 		}
 		(*level)->Frames[cout] = raw16.us;
+	}
+
+
+
+
+
+	for (int i = 0; i < 4; i++) {
+		raw32.c[i] = data[byteCounter]; byteCounter++;
+	}
+	(*level)->NumModels = raw32.i;
+
+	(*level)->Models = malloc(sizeof(tr_model) * (*level)->NumModels);
+
+	for (int cout = 0; cout < (*level)->NumModels; cout++) {
+		(*level)->Models[cout] = testS_LoadModel(data, byteCounter);
+	}
+
+
+
+
+	for (int i = 0; i < 4; i++) {
+		raw32.c[i] = data[byteCounter]; byteCounter++;
+	}
+	(*level)->NumStaticMeshes = raw32.i;
+
+	(*level)->StaticMeshes = malloc(sizeof(tr_staticmesh) * (*level)->NumStaticMeshes);
+
+	for (int cout = 0; cout < (*level)->NumStaticMeshes; cout++) {
+		(*level)->StaticMeshes[cout] = testS_LoadStatic(data, byteCounter);
+	}
+
+
+
+
+	for (int i = 0; i < 4; i++) {
+		raw32.c[i] = data[byteCounter]; byteCounter++;
+	}
+	(*level)->NumBoxes = raw32.i;
+
+	(*level)->Boxes = malloc(sizeof(tr2_box) * (*level)->NumBoxes);
+
+	for (int cout = 0; cout < (*level)->NumBoxes; cout++) {
+		(*level)->Boxes[cout] = testS_LoadBox(data, byteCounter);
+	}
+
+
+
+
+
+	for (int i = 0; i < 4; i++) {
+		raw32.c[i] = data[byteCounter]; byteCounter++;
+	}
+	(*level)->NumOverlaps = raw32.i;
+
+	(*level)->Overlaps = malloc(sizeof(short) * (*level)->NumOverlaps);
+
+	for (int cout = 0; cout < (*level)->NumOverlaps; cout++) {
+		for (int i = 0; i < 2; i++) {
+			raw16.c[i] = data[byteCounter]; byteCounter++;
+		}
+		(*level)->Overlaps[cout] = raw16.s;
+	}
+
+
+
+
+
+	int NumZones = ((*level)->NumBoxes * 10);
+
+	for (int cout = 0; cout < NumZones; cout++) {
+		for (int i = 0; i < 2; i++) {
+			raw16.c[i] = data[byteCounter]; byteCounter++;
+		}
+		(*level)->Zones[cout] = raw16.s;
+	}
+
+
+
+
+
+	for (int i = 0; i < 4; i++) {
+		raw32.c[i] = data[byteCounter]; byteCounter++;
+	}
+	(*level)->NumObjectTextures = raw32.i;
+
+	(*level)->ObjectTextures = malloc(sizeof(tr4_object_texture) * (*level)->NumObjectTextures);
+
+	for (int cout = 0; cout < (*level)->NumObjectTextures; cout++) {
+		(*level)->ObjectTextures[cout] = testS_LoadObjTex(data, byteCounter);
+	}
+
+
+
+
+
+	for (int i = 0; i < 4; i++) {
+		raw32.c[i] = data[byteCounter]; byteCounter++;
+	}
+	(*level)->NumEntities = raw32.i;
+
+	(*level)->Entities = malloc(sizeof(tr4_entity) * (*level)->NumEntities);
+
+	for (int cout = 0; cout < (*level)->NumEntities; cout++) {
+		(*level)->Entities[cout] = testS_LoadEntity(data, byteCounter);
 	}
 }
 
@@ -839,4 +951,225 @@ tr_meshtree_node testS_LoadMeshtree(uint8_t* data, int counter) {
 	byteCounter = counter;
 
 	return node;
+}
+
+tr_model testS_LoadModel(uint8_t* data, int counter) {
+	raw_int raw32;
+	raw_short raw16;
+	tr_model model;
+
+	for (int i = 0; i < 4; i++) {
+		raw32.c[i] = data[counter]; counter++;
+	}
+	model.ID = raw32.i;
+
+	for (int i = 0; i < 2; i++) {
+		raw16.c[i] = data[counter]; counter++;
+	}
+	model.NumMeshes = raw16.s;
+
+	for (int i = 0; i < 2; i++) {
+		raw16.c[i] = data[counter]; counter++;
+	}
+	model.StartingMesh = raw16.s;
+
+	for (int i = 0; i < 4; i++) {
+		raw32.c[i] = data[counter]; counter++;
+	}
+	model.MeshTree = raw32.i;
+
+	for (int i = 0; i < 4; i++) {
+		raw32.c[i] = data[counter]; counter++;
+	}
+	model.FrameOffset = raw32.i;
+
+	for (int i = 0; i < 2; i++) {
+		raw16.c[i] = data[counter]; counter++;
+	}
+	model.Animation = raw16.s;
+
+	byteCounter = counter;
+
+	return model;
+}
+
+tr_staticmesh testS_LoadStatic(uint8_t* data, int counter) {
+	raw_short raw16;
+	raw_int raw32;
+	tr_staticmesh mesh;
+
+	for (int i = 0; i < 4; i++) {
+		raw32.c[i] = data[counter]; counter++;
+	}
+	mesh.ID = raw32.i;
+
+	for (int i = 0; i < 2; i++) {
+		raw16.c[i] = data[counter]; counter++;
+	}
+	mesh.Mesh = raw16.s;
+
+	short boundingBox[6];
+	for (int a = 0; a < 6; a++) {
+		for (int i = 0; i < 2; i++) {
+			raw16.c[i] = data[counter]; counter++;
+		}
+		boundingBox[a] = raw16.s;
+	}
+	mesh.VisibilityBox.MinX = boundingBox[0];
+	mesh.VisibilityBox.MaxX = boundingBox[1];
+	mesh.VisibilityBox.MinY = boundingBox[2];
+	mesh.VisibilityBox.MaxY = boundingBox[3];
+	mesh.VisibilityBox.MinZ = boundingBox[4];
+	mesh.VisibilityBox.MaxZ = boundingBox[5];
+
+	for (int a = 0; a < 6; a++) {
+		for (int i = 0; i < 2; i++) {
+			raw16.c[i] = data[counter]; counter++;
+		}
+		boundingBox[a] = raw16.s;
+	}
+	mesh.CollisionBox.MinX = boundingBox[0];
+	mesh.CollisionBox.MaxX = boundingBox[1];
+	mesh.CollisionBox.MinY = boundingBox[2];
+	mesh.CollisionBox.MaxY = boundingBox[3];
+	mesh.CollisionBox.MinZ = boundingBox[4];
+	mesh.CollisionBox.MaxZ = boundingBox[5];
+
+	for (int i = 0; i < 2; i++) {
+		raw16.c[i] = data[counter]; counter++;
+	}
+	mesh.Flags = raw16.us;
+
+	byteCounter = counter;
+
+	return mesh;
+}
+
+tr2_box testS_LoadBox(uint8_t* data, int counter) {
+	raw_int raw32;
+	raw_short raw16;
+	tr2_box box;
+
+	box.Zmin = data[counter]; counter++;
+	box.Zmax = data[counter]; counter++;
+	box.Xmin = data[counter]; counter++;
+	box.Xmax = data[counter]; counter++;
+
+	for (int i = 0; i < 2; i++) {
+		raw16.c[i] = data[counter]; counter++;
+	}
+	box.TrueFloor = raw16.s;
+
+	for (int i = 0; i < 2; i++) {
+		raw16.c[i] = data[counter]; counter++;
+	}
+	box.OverlapIndex = raw16.s;
+
+	byteCounter = counter;
+
+	return box;
+}
+
+tr4_object_texture testS_LoadObjTex(uint8_t* data, int counter) {
+	raw_int raw32;
+	raw_short raw16;
+	tr4_object_texture tex;
+
+	for (int i = 0; i < 2; i++) {
+		raw16.c[i] = data[counter]; counter++;
+	}
+	tex.Attribute = raw16.s;
+
+	for (int i = 0; i < 2; i++) {
+		raw16.c[i] = data[counter]; counter++;
+	}
+	tex.TileAndFlag = raw16.s;
+
+	for (int i = 0; i < 2; i++) {
+		raw16.c[i] = data[counter]; counter++;
+	}
+	tex.NewFlags = raw16.s;
+
+	for (int a = 0; a < 4; a++) {
+		for (int i = 0; i < 2; i++) {
+			raw16.c[i] = data[counter]; counter++;
+		}
+		tex.Vertices[a].Xcoordinate = raw16.s;
+
+		for (int i = 0; i < 2; i++) {
+			raw16.c[i] = data[counter]; counter++;
+		}
+		tex.Vertices[a].Ycoordinate = raw16.s;
+	}
+
+	counter += 8;
+
+	for (int i = 0; i < 4; i++) {
+		raw32.c[i] = data[counter]; counter++;
+	}
+	tex.Width = raw32.ui;
+
+	for (int i = 0; i < 4; i++) {
+		raw32.c[i] = data[counter]; counter++;
+	}
+	tex.Height = raw32.ui;
+
+	byteCounter = counter;
+
+	return tex;
+}
+
+tr4_entity testS_LoadEntity(uint8_t* data, int counter) {
+	raw_int raw32;
+	raw_short raw16;
+	tr4_entity entity;
+	
+	for (int i = 0; i < 2; i++) {
+		raw16.c[i] = data[counter]; counter++;
+	}
+	entity.TypeID = raw16.s;
+
+	for (int i = 0; i < 2; i++) {
+		raw16.c[i] = data[counter]; counter++;
+	}
+	entity.Room = raw16.s;
+
+	for (int i = 0; i < 4; i++) {
+		raw32.c[i] = data[counter]; counter++;
+	}
+	entity.x = raw32.i;
+
+	for (int i = 0; i < 4; i++) {
+		raw32.c[i] = data[counter]; counter++;
+	}
+	entity.y = raw32.i;
+
+	for (int i = 0; i < 4; i++) {
+		raw32.c[i] = data[counter]; counter++;
+	}
+	entity.z = raw32.i;
+
+	for (int i = 0; i < 2; i++) {
+		raw16.c[i] = data[counter]; counter++;
+	}
+	entity.Angle = raw16.s;
+
+	for (int i = 0; i < 2; i++) {
+		raw16.c[i] = data[counter]; counter++;
+	}
+	entity.Intensity1 = raw16.s;
+
+	for (int i = 0; i < 2; i++) {
+		raw16.c[i] = data[counter]; counter++;
+	}
+	entity.OCB = raw16.s;
+
+	for (int i = 0; i < 2; i++) {
+		raw16.c[i] = data[counter]; counter++;
+	}
+	entity.Flags = raw16.us;
+
+	byteCounter = counter;
+
+	return entity;
 }

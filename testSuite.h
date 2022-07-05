@@ -36,3 +36,18 @@ tr4_animation testS_LoadAnimation(uint8_t* data, int counter);
 
 // Load a mesh tree from a file
 tr_meshtree_node testS_LoadMeshtree(uint8_t* data, int counter);
+
+// Load a model from a file
+tr_model testS_LoadModel(uint8_t* data, int counter);
+
+// Load a staticmesh from a file
+tr_staticmesh testS_LoadStatic(uint8_t* data, int counter);
+
+// Load a Box from a file
+tr2_box testS_LoadBox(uint8_t* data, int counter);
+
+// Load an Object Texture
+tr4_object_texture testS_LoadObjTex(uint8_t* data, int counter);
+
+// Load an Entity 
+tr4_entity testS_LoadEntity(uint8_t* data, int counter);

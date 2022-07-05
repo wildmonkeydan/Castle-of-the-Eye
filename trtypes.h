@@ -295,8 +295,7 @@ typedef struct  // 38 bytes
 
     tr_object_texture_vert Vertices[4]; // The four corners of the texture
 
-    uint32_t OriginalU;
-    uint32_t OriginalV;
+
     uint32_t Width;     // Actually width-1
     uint32_t Height;    // Actually height-1
 }tr4_object_texture;
