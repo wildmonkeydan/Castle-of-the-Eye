@@ -32,7 +32,6 @@ void testS_Run() {
 
 		if (load == 0) {
 			menu_CleanUp();
-			input_Disable();
 			TIM_IMAGE tim;
 			unsigned long* texone = cdLoad_File("\\TEX0.TIM;1");
 			ui_LoadTexture(texone, &tim);
@@ -63,7 +62,6 @@ void testS_Run() {
 			free(lvlData);
 			printf("e");
 			testInit = false;
-			input_Enable();
 		}
 
 		load++;
@@ -186,7 +184,9 @@ void testS_LoadGeo(u_char* data, lvlData** level) {
 
 	printf("NumRooms: %d", (*level)->NumRooms);
 
-	(*level)->Rooms = malloc(sizeof(tr4_room) * (*level)->NumRooms);
+	if (!(*level)->NumRooms == 0) {
+		(*level)->Rooms = malloc(sizeof(tr4_room) * (*level)->NumRooms);
+	}
 
 	for (int cout = 0; cout < (*level)->NumRooms; cout++) {
 		printf(" %d", byteCounter);
@@ -236,7 +236,9 @@ tr4_room testS_LoadRoom(uint8_t* data, int counter) {
 	}
 	room.RoomData.NumVertices = raw16.s;
 
-	room.RoomData.Vertices = malloc(sizeof(tr3_room_vertex) * room.RoomData.NumVertices);
+	if (!room.RoomData.NumVertices == 0) {
+		room.RoomData.Vertices = malloc(sizeof(tr3_room_vertex) * room.RoomData.NumVertices);
+	}
 
 	for (int a = 0; a < room.RoomData.NumVertices; a++) { // Load room verts
 		for (int i = 0; i < 2; i++) {
@@ -270,7 +272,9 @@ tr4_room testS_LoadRoom(uint8_t* data, int counter) {
 	}
 	room.RoomData.NumRectangles = raw16.s;
 
-	room.RoomData.Rectangles = malloc(sizeof(tr_face4) * room.RoomData.NumRectangles);
+	if (!room.RoomData.NumRectangles == 0) {
+		room.RoomData.Rectangles = malloc(sizeof(tr_face4) * room.RoomData.NumRectangles);
+	}
 
 	for (int a = 0; a < room.RoomData.NumRectangles; a++) { // Load room quads
 		for (int b = 0; b < 4; b++) {
@@ -292,7 +296,9 @@ tr4_room testS_LoadRoom(uint8_t* data, int counter) {
 	}
 	room.RoomData.NumTriangles = raw16.s;
 
-	room.RoomData.Triangles = malloc(sizeof(tr_face3) * room.RoomData.NumTriangles);
+	if (!room.RoomData.NumTriangles == 0) {
+		room.RoomData.Triangles = malloc(sizeof(tr_face3) * room.RoomData.NumTriangles);
+	}
 
 	for (int a = 0; a < room.RoomData.NumTriangles; a++) { // Load room tris
 		for (int b = 0; b < 3; b++) {
@@ -325,7 +331,9 @@ tr4_room testS_LoadRoom(uint8_t* data, int counter) {
 
 	printf(" %d %d", room.NumPortals, raw16.s);
 
-	room.Portals = malloc(sizeof(tr_room_portal) * room.NumPortals);
+	if (!room.NumPortals == 0) {
+		room.Portals = malloc(sizeof(tr_room_portal) * room.NumPortals);
+	}
 
 	for (int a = 0; a < room.NumPortals; a++) { // Loads portals
 
@@ -423,7 +431,9 @@ tr4_room testS_LoadRoom(uint8_t* data, int counter) {
 
 	printf(" %d", room.NumStaticMeshes);
 
-	room.StaticMeshes = malloc(sizeof(tr3_room_staticmesh) * room.NumStaticMeshes);
+	if (!room.NumStaticMeshes == 0) {
+		room.StaticMeshes = malloc(sizeof(tr3_room_staticmesh) * room.NumStaticMeshes);
+	}
 
 	for (int a = 0; a < room.NumStaticMeshes; a++) { // Loads staticmeshes
 		for (int i = 0; i < 4; i++) {
@@ -497,8 +507,10 @@ void testS_LoadMeshes(u_char* data, lvlData** level) {
 
 	printf("\n%d", (*level)->NumMeshData);
 
-	(*level)->Meshes = malloc(sizeof(tr4_mesh) * (*level)->NumMeshData);
-	
+	if (!(*level)->NumMeshData == 0) {
+		(*level)->Meshes = malloc(sizeof(tr4_mesh) * (*level)->NumMeshData);
+	}
+
 	for (int cout = 0; cout < (*level)->NumMeshData; cout++) {
 		tr4_mesh mesh = testS_LoadMesh(data, byteCounter);
 		(*level)->Meshes[cout] = mesh;
@@ -535,7 +547,9 @@ tr4_mesh testS_LoadMesh(uint8_t* data, int counter) {
 	}
 	mesh.NumVertices = raw16.s;
 
-	mesh.Vertices = malloc(sizeof(tr_vertex) * mesh.NumVertices);
+	if (!mesh.NumVertices == 0) {
+		mesh.Vertices = malloc(sizeof(tr_vertex) * mesh.NumVertices);
+	}
 
 	for (int a = 0; a < mesh.NumVertices; a++) {
 		for (int i = 0; i < 2; i++) {
@@ -559,7 +573,9 @@ tr4_mesh testS_LoadMesh(uint8_t* data, int counter) {
 	}
 	mesh.NumTexturedRectangles = raw16.s;
 
-	mesh.TexturedRectangles = malloc(sizeof(tr4_mesh_face4) * mesh.NumTexturedRectangles);
+	if (!mesh.NumTexturedRectangles == 0) {
+		mesh.TexturedRectangles = malloc(sizeof(tr4_mesh_face4) * mesh.NumTexturedRectangles);
+	}
 
 	for (int a = 0; a < mesh.NumTexturedRectangles; a++) {
 		for (int b = 0; b < 4; b++) {
@@ -585,7 +601,9 @@ tr4_mesh testS_LoadMesh(uint8_t* data, int counter) {
 	}
 	mesh.NumTexturedTriangles = raw16.s;
 
-	mesh.TexturedTriangles = malloc(sizeof(tr4_mesh_face3) * mesh.NumTexturedTriangles);
+	if (!mesh.NumTexturedTriangles == 0) {
+		mesh.TexturedTriangles = malloc(sizeof(tr4_mesh_face3) * mesh.NumTexturedTriangles);
+	}
 
 	for (int a = 0; a < mesh.NumTexturedTriangles; a++) {
 		for (int b = 0; b < 3; b++) {
@@ -626,7 +644,9 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 	}
 	(*level)->NumFloorData = raw16.s;
 
-	(*level)->FloorData = malloc(sizeof(short) * (*level)->NumFloorData);
+	if (!(*level)->NumFloorData == 0) {
+		(*level)->FloorData = malloc(sizeof(short) * (*level)->NumFloorData);
+	}
 
 	printf("\nNum Floordata: %d", (*level)->NumFloorData);
 
@@ -647,7 +667,9 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 	}
 	(*level)->NumAnimations = raw32.i;
 
-	(*level)->Animations = malloc(sizeof(tr4_animation) * (*level)->NumAnimations);
+	if (!(*level)->NumAnimations == 0) {
+		(*level)->Animations = malloc(sizeof(tr4_animation) * (*level)->NumAnimations);
+	}
 
 	printf("\nNum Animations: %d", (*level)->NumAnimations);
 
@@ -665,7 +687,9 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 	}
 	(*level)->NumStateChanges = raw32.ui;
 
-	(*level)->StateChanges = malloc(sizeof(tr_state_change) * (*level)->NumStateChanges);
+	if (!(*level)->NumStateChanges == 0) {
+		(*level)->StateChanges = malloc(sizeof(tr_state_change) * (*level)->NumStateChanges);
+	}
 
 	printf("\nNum State Changes: %d", (*level)->NumStateChanges);
 
@@ -695,7 +719,9 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 	}
 	(*level)->NumAnimDispatches = raw32.ui;
 
-	(*level)->AnimDispatches = malloc(sizeof(tr_anim_dispatch) * (*level)->NumAnimDispatches);
+	if (!(*level)->NumAnimDispatches == 0) {
+		(*level)->AnimDispatches = malloc(sizeof(tr_anim_dispatch) * (*level)->NumAnimDispatches);
+	}
 
 	printf("\nNum Anim Dispatches: %d", (*level)->NumAnimDispatches);
 
@@ -724,7 +750,9 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 	}
 	(*level)->NumAnimCommands = raw32.i;
 
-	(*level)->AnimCommands = malloc(sizeof(tr_anim_command) * (*level)->NumAnimCommands);
+	if (!(*level)->NumAnimCommands == 0) {
+		(*level)->AnimCommands = malloc(sizeof(tr_anim_command) * (*level)->NumAnimCommands);
+	}
 
 	printf("\nNum Anim Commands: %d", (*level)->NumAnimCommands);
 
@@ -745,7 +773,9 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 	}
 	(*level)->NumMeshTrees = raw32.i;
 
-	(*level)->MeshTrees = malloc(sizeof(tr_meshtree_node) * (*level)->NumMeshTrees);
+	if (!(*level)->NumMeshTrees == 0) {
+		(*level)->MeshTrees = malloc(sizeof(tr_meshtree_node) * (*level)->NumMeshTrees);
+	}
 
 	printf("\nNum Meshtrees: %d", (*level)->NumMeshTrees);
 
@@ -762,7 +792,9 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 	}
 	(*level)->NumFrames = raw32.i;
 
-	(*level)->Frames = malloc(sizeof(short) * (*level)->NumFrames);
+	if (!(*level)->NumFrames == 0) {
+		(*level)->Frames = malloc(sizeof(short) * (*level)->NumFrames);
+	}
 
 	printf("\nNum Frames: %d", (*level)->NumFrames);
 
@@ -782,7 +814,9 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 	}
 	(*level)->NumModels = raw32.i;
 
-	(*level)->Models = malloc(sizeof(tr_model) * (*level)->NumModels);
+	if (!(*level)->NumModels == 0) {
+		(*level)->Models = malloc(sizeof(tr_model) * (*level)->NumModels);
+	}
 
 	printf("\nNum Models: %d", (*level)->NumModels);
 
@@ -798,7 +832,9 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 	}
 	(*level)->NumStaticMeshes = raw32.i;
 
-	(*level)->StaticMeshes = malloc(sizeof(tr_staticmesh) * (*level)->NumStaticMeshes);
+	if (!(*level)->NumStaticMeshes == 0) {
+		(*level)->StaticMeshes = malloc(sizeof(tr_staticmesh) * (*level)->NumStaticMeshes);
+	}
 
 	printf("\nNum Staticmeshes: %d", (*level)->NumStaticMeshes);
 
@@ -812,7 +848,9 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 	}
 	(*level)->NumBoxes = raw32.i;
 
-	(*level)->Boxes = malloc(sizeof(tr2_box) * (*level)->NumBoxes);
+	if (!(*level)->NumBoxes == 0) {
+		(*level)->Boxes = malloc(sizeof(tr2_box) * (*level)->NumBoxes);
+	}
 
 	printf("\nNum Boxes: %d", (*level)->NumBoxes);
 
@@ -829,7 +867,9 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 	}
 	(*level)->NumOverlaps = raw32.i;
 
-	(*level)->Overlaps = malloc(sizeof(short) * (*level)->NumOverlaps);
+	if (!(*level)->NumOverlaps == 0) {
+		(*level)->Overlaps = malloc(sizeof(short) * (*level)->NumOverlaps);
+	}
 
 	printf("\nNum Overlaps: %d", (*level)->NumOverlaps);
 
@@ -846,7 +886,9 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 
 	int NumZones = ((*level)->NumBoxes * 10);
 
-	(*level)->Zones = malloc(sizeof(short) * NumZones);
+	if (!NumZones == 0) {
+		(*level)->Zones = malloc(sizeof(short) * NumZones);
+	}
 
 	printf("\nNum Zones: %d", NumZones);
 
@@ -869,7 +911,9 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 
 	printf("\nNum Object Textures: %d", (*level)->NumObjectTextures);
 
-	(*level)->ObjectTextures = malloc(sizeof(tr4_object_texture) * (*level)->NumObjectTextures);
+	if (!(*level)->NumObjectTextures == 0) {
+		(*level)->ObjectTextures = malloc(sizeof(tr4_object_texture) * (*level)->NumObjectTextures);
+	}
 
 	for (int cout = 0; cout < (*level)->NumObjectTextures; cout++) {
 		(*level)->ObjectTextures[cout] = testS_LoadObjTex(data, byteCounter);
@@ -884,7 +928,9 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 	}
 	(*level)->NumEntities = raw32.i;
 
-	(*level)->Entities = malloc(sizeof(tr4_entity) * (*level)->NumEntities);
+	if (!(*level)->NumEntities == 0) {
+		(*level)->Entities = malloc(sizeof(tr4_entity) * (*level)->NumEntities);
+	}
 
 	for (int cout = 0; cout < (*level)->NumEntities; cout++) {
 		(*level)->Entities[cout] = testS_LoadEntity(data, byteCounter);
