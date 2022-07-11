@@ -24,113 +24,151 @@ static CAMINPUT input;
 static char roomCount = 0;
 static unsigned char meshCount = 0;
 static char mode = 0;
+static char load = 0;
 
 void testS_Run() {
+	
 	if (testInit == true) {
-		menu_CleanUp();
 
-		unsigned long* geoData = cdLoad_File("\\CASTLE.GEO;1");
-		testS_LoadGeo((unsigned char*)geoData, &level);
-		free(geoData);
-
-		unsigned long* meshData = cdLoad_File("\\CASTLE.MSH;1");
-		testS_LoadMeshes((unsigned char*)meshData, &level);
-		free(meshData);
-
-		unsigned long* lvlData = cdLoad_File("\\CASTLE.LVL;1");
-		testS_LoadMisc((unsigned char*)lvlData, &level);
-		free(lvlData);
-
-		printf("e");
-		testInit = false;
-	}
-
-	input = input_TestSuiteCam(&trot,input);
-
-	mode += input.mode;
-
-	if (mode > 1) {
-		mode = 0;
-	}
-	
-
-	switch(mode){
-	case 0:
-		roomCount += input.count;
-
-		if (roomCount > 20) {
-			roomCount = 20;
+		if (load == 0) {
+			menu_CleanUp();
+			input_Disable();
+			TIM_IMAGE tim;
+			unsigned long* texone = cdLoad_File("\\TEX0.TIM;1");
+			ui_LoadTexture(texone, &tim);
+			free(texone);
+			unsigned long* textwo = cdLoad_File("\\TEX1.TIM;1");
+			ui_LoadTexture(textwo, &tim);
+			free(textwo);
+			unsigned long* texthree = cdLoad_File("\\TEX2.TIM;1");
+			ui_LoadTexture(texthree, &tim);
+			free(texthree);
 		}
-		if (roomCount < 0) {
-			roomCount = 0;
+
+		if (load == 1) {
+			unsigned long* geoData = cdLoad_File("\\CASTLE.GEO;1");
+			testS_LoadGeo((unsigned char*)geoData, &level);
+			free(geoData);
 		}
-		break;
-	case 1:
-		meshCount += input.count;
 
-		if (meshCount > 1) {
-			meshCount = 1;
+		if (load == 2) {
+			unsigned long* meshData = cdLoad_File("\\CASTLE.MSH;1");
+			testS_LoadMeshes((unsigned char*)meshData, &level);
+			free(meshData);
 		}
-		if (meshCount < 0) {
-			meshCount = 0;
+
+		if (load == 3) {
+			unsigned long* lvlData = cdLoad_File("\\CASTLE.LVL;1");
+			testS_LoadMisc((unsigned char*)lvlData, &level);
+			free(lvlData);
+			printf("e");
+			testInit = false;
+			input_Enable();
 		}
-	
+
+		load++;
+
+		TILEDATA tile;
+		tile.color[0] = 255;
+		tile.color[1] = 255;
+		tile.color[2] = 255;
+		tile.size.h = 12;
+		tile.size.w = (load * 50);
+		tile.size.x = 60;
+		tile.size.y = 200;
+
+		disp_DrawTile(tile);
+		
 	}
-	
+	else {
 
-	// Set rotation to the matrix
-	RotMatrix(&trot, &mtx);
+		input = input_TestSuiteCam(&trot, input);
 
-	// Divide out the fractions of camera coordinates and invert
-	// the sign, so camera coordinates will line up to world
-	// (or geometry) coordinates
-	tpos.vx = -input.cam_pos.vx >> 12;
-	tpos.vy = -input.cam_pos.vy >> 12;
-	tpos.vz = -input.cam_pos.vz >> 12;
+		mode += input.mode;
 
-	// Divide out fractions of camera rotation
-	trot.vx = input.cam_rot.vx >> 12;
-	trot.vy = input.cam_rot.vy >> 12;
-	trot.vz = input.cam_rot.vz >> 12;
+		if (mode > 1) {
+			mode = 0;
+		}
 
-	// Apply rotation of matrix to translation value to achieve a
-	// first person perspective
-	ApplyMatrixLV(&mtx, &tpos, &tpos);
 
-	// Set translation matrix
-	TransMatrix(&mtx, &tpos);
-	SetRotMatrix(&mtx);
-	SetTransMatrix(&mtx);
+		switch (mode) {
+		case 0:
+			roomCount += input.count;
 
-	switch (mode) {
-	case 0:
-		gte_DrawRoom(&mtx, &pos, &rot, level->Rooms[roomCount].RoomData);
-		break;
-	case 1:
-		gte_DrawMesh(&mtx, &pos, &rot, level->Meshes[meshCount]);
+			if (roomCount > 20) {
+				roomCount = 20;
+			}
+			if (roomCount < 0) {
+				roomCount = 0;
+			}
+			break;
+		case 1:
+			meshCount += input.count;
+
+			if (meshCount > 1) {
+				meshCount = 1;
+			}
+			if (meshCount < 0) {
+				meshCount = 0;
+			}
+
+		}
+
+
+		// Set rotation to the matrix
+		RotMatrix(&trot, &mtx);
+
+		// Divide out the fractions of camera coordinates and invert
+		// the sign, so camera coordinates will line up to world
+		// (or geometry) coordinates
+		tpos.vx = -input.cam_pos.vx >> 12;
+		tpos.vy = -input.cam_pos.vy >> 12;
+		tpos.vz = -input.cam_pos.vz >> 12;
+
+		// Divide out fractions of camera rotation
+		trot.vx = input.cam_rot.vx >> 12;
+		trot.vy = input.cam_rot.vy >> 12;
+		trot.vz = input.cam_rot.vz >> 12;
+
+		// Apply rotation of matrix to translation value to achieve a
+		// first person perspective
+		ApplyMatrixLV(&mtx, &tpos, &tpos);
+
+		// Set translation matrix
+		TransMatrix(&mtx, &tpos);
+		SetRotMatrix(&mtx);
+		SetTransMatrix(&mtx);
+
+		switch (mode) {
+		case 0:
+			gte_DrawRoom(&mtx, &pos, &rot, level->Rooms[roomCount].RoomData);
+			break;
+		case 1:
+			gte_DrawMesh(&mtx, &pos, &rot, level->Meshes[meshCount]);
+		}
+
+
+
+
+
+		FntPrint("X=%d Y=%d Z=%d\n",
+			input.cam_pos.vx >> 12,
+			input.cam_pos.vy >> 12,
+			input.cam_pos.vz >> 12);
+		FntPrint("RX=%d RY=%d\n",
+			input.cam_rot.vx >> 12,
+			input.cam_rot.vy >> 12);
+		switch (mode) {
+		case 0:
+			FntPrint("Room No. : %d", roomCount);
+			break;
+		case 1:
+			FntPrint("Mesh No. : %d", meshCount);
+			break;
+		}
+
+		FntFlush(-1);
 	}
-
-	
-
-
-
-	FntPrint("X=%d Y=%d Z=%d\n",
-		input.cam_pos.vx >> 12,
-		input.cam_pos.vy >> 12,
-		input.cam_pos.vz >> 12);
-	FntPrint("RX=%d RY=%d\n",
-		input.cam_rot.vx >> 12,
-		input.cam_rot.vy >> 12);
-	switch (mode) {
-	case 0:
-		FntPrint("Room No. : %d", roomCount);
-		break;
-	case 1:
-		FntPrint("Mesh No. : %d", meshCount);
-		break;
-	}
-	
-	FntFlush(-1);
 }
 
 void testS_LoadGeo(u_char* data, lvlData** level) {
@@ -598,6 +636,7 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 		}
 		(*level)->FloorData[cout] = raw16.us;
 	}
+	byteCounter += 2;
 
 
 
@@ -612,7 +651,7 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 
 	printf("\nNum Animations: %d", (*level)->NumAnimations);
 
-	for (int cout = 0; cout < (*level)->NumMeshData; cout++) {
+	for (int cout = 0; cout < (*level)->NumAnimations; cout++) {
 		tr4_animation anim = testS_LoadAnimation(data, byteCounter);
 		(*level)->Animations[cout] = anim;
 	}
@@ -725,6 +764,8 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 
 	(*level)->Frames = malloc(sizeof(short) * (*level)->NumFrames);
 
+	printf("\nNum Frames: %d", (*level)->NumFrames);
+
 	for (int cout = 0; cout < (*level)->NumAnimCommands; cout++) {
 		for (int i = 0; i < 2; i++) {
 			raw16.c[i] = data[byteCounter]; byteCounter++;
@@ -743,6 +784,8 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 
 	(*level)->Models = malloc(sizeof(tr_model) * (*level)->NumModels);
 
+	printf("\nNum Models: %d", (*level)->NumModels);
+
 	for (int cout = 0; cout < (*level)->NumModels; cout++) {
 		(*level)->Models[cout] = testS_LoadModel(data, byteCounter);
 	}
@@ -757,11 +800,11 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 
 	(*level)->StaticMeshes = malloc(sizeof(tr_staticmesh) * (*level)->NumStaticMeshes);
 
+	printf("\nNum Staticmeshes: %d", (*level)->NumStaticMeshes);
+
 	for (int cout = 0; cout < (*level)->NumStaticMeshes; cout++) {
 		(*level)->StaticMeshes[cout] = testS_LoadStatic(data, byteCounter);
 	}
-
-
 
 
 	for (int i = 0; i < 4; i++) {
@@ -770,6 +813,8 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 	(*level)->NumBoxes = raw32.i;
 
 	(*level)->Boxes = malloc(sizeof(tr2_box) * (*level)->NumBoxes);
+
+	printf("\nNum Boxes: %d", (*level)->NumBoxes);
 
 	for (int cout = 0; cout < (*level)->NumBoxes; cout++) {
 		(*level)->Boxes[cout] = testS_LoadBox(data, byteCounter);
@@ -786,6 +831,8 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 
 	(*level)->Overlaps = malloc(sizeof(short) * (*level)->NumOverlaps);
 
+	printf("\nNum Overlaps: %d", (*level)->NumOverlaps);
+
 	for (int cout = 0; cout < (*level)->NumOverlaps; cout++) {
 		for (int i = 0; i < 2; i++) {
 			raw16.c[i] = data[byteCounter]; byteCounter++;
@@ -799,6 +846,10 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 
 	int NumZones = ((*level)->NumBoxes * 10);
 
+	(*level)->Zones = malloc(sizeof(short) * NumZones);
+
+	printf("\nNum Zones: %d", NumZones);
+
 	for (int cout = 0; cout < NumZones; cout++) {
 		for (int i = 0; i < 2; i++) {
 			raw16.c[i] = data[byteCounter]; byteCounter++;
@@ -810,10 +861,13 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 
 
 
+	byteCounter += 4;
 	for (int i = 0; i < 4; i++) {
 		raw32.c[i] = data[byteCounter]; byteCounter++;
 	}
 	(*level)->NumObjectTextures = raw32.i;
+
+	printf("\nNum Object Textures: %d", (*level)->NumObjectTextures);
 
 	(*level)->ObjectTextures = malloc(sizeof(tr4_object_texture) * (*level)->NumObjectTextures);
 
@@ -835,6 +889,7 @@ void testS_LoadMisc(uint8_t* data, lvlData** level) {
 	for (int cout = 0; cout < (*level)->NumEntities; cout++) {
 		(*level)->Entities[cout] = testS_LoadEntity(data, byteCounter);
 	}
+	
 }
 
 tr4_animation testS_LoadAnimation(uint8_t* data, int counter) {
@@ -1089,6 +1144,8 @@ tr4_object_texture testS_LoadObjTex(uint8_t* data, int counter) {
 		raw16.c[i] = data[counter]; counter++;
 	}
 	tex.NewFlags = raw16.s;
+
+	printf("\nProcess UV");
 
 	for (int a = 0; a < 4; a++) {
 		for (int i = 0; i < 2; i++) {

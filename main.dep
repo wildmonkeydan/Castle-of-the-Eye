@@ -21,4 +21,5 @@ main.o: main.c C:/psyq/nolibgs_hello_worlds/psyq/include/sys/types.h \
  C:/psyq/nolibgs_hello_worlds/psyq/include/inline_c.h input.h strplay.c \
  gameflow.h const.h display.h \
  c:\psnoobsdk\lib\gcc\mipsel-none-elf\11.1.0\include\stdint.h \
- c:\psnoobsdk\lib\gcc\mipsel-none-elf\11.1.0\include\stdint-gcc.h ui.h
+ c:\psnoobsdk\lib\gcc\mipsel-none-elf\11.1.0\include\stdint-gcc.h ui.h \
+ trtypes.h

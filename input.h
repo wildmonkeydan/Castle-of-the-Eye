@@ -9,12 +9,14 @@ typedef struct {
 	char	mode;
 }CAMINPUT;
 
-
-// Pad data buffer
-static char pad_buff[2][34];
-
 // Initiate the pad data buffer
 void input_Init();
+
+// Disable pad updates
+void input_Disable();
+
+// Enable pad updates
+void input_Enable();
 
 // Process inputs specfic to the menus
 char input_Menu();

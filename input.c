@@ -7,6 +7,8 @@
 
 
 PADTYPE* pad;
+// Pad data buffer
+char pad_buff[2][34];
 
 void input_Init() {
 	// Init BIOS pad driver and set pad buffers (buffers are updated
@@ -18,6 +20,14 @@ void input_Init() {
 
 	// Don't make pad driver acknowledge V-Blank IRQ (recommended)
 	ChangeClearPAD(0);
+}
+
+void input_Disable() {
+	DisablePAD();
+}
+
+void input_Enable() {
+	EnablePAD();
 }
 
 char input_Menu() {
@@ -185,6 +195,7 @@ CAMINPUT input_TestSuiteCam(SVECTOR* trot, CAMINPUT input) {
 				input.cam_rot.vy -= (pad->rs_x - 128) << 9;
 			}
 		}
+		FntPrint("BUTTONS=%04x\n", pad->btn);
 	}
 	return input;
 }

@@ -19,7 +19,7 @@
 
 
 SpuCommonAttr spuSettings;
-static unsigned char ramAddr[1200000];
+static unsigned char ramAddr[1400000];
 STRFILE StrFile[] = {
 	// File name	Resolution		Frame count
 	"\\COPY.STR;1", 320, 240, 893
@@ -53,7 +53,9 @@ void init() {
 	gte_SetGeomScreen(CENTERX);
 
 	CdInit();
+	EnterCriticalSection();
 	InitHeap((u_long*)ramAddr, sizeof(ramAddr));
+	ExitCriticalSection();
 	SpuInit();
 
 	// Set master & CD volume to max
